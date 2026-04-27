@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteVault - Personal Knowledge Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-title">NoteVault</h1>
+                <button id="newNoteBtn" class="btn btn-primary" title="New Note">
+                    <span class="icon">+</span> New Note
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search notes...">
+            </div>
+            
+            <div class="sidebar-actions">
+                <button id="newFolderBtn" class="btn btn-secondary" title="New Folder">
+                    <span class="icon">📁</span> New Folder
+                </button>
+                <button id="graphViewBtn" class="btn btn-secondary" title="Graph View">
+                    <span class="icon">◉</span> Graph
+                </button>
+            </div>
+            
+            <div class="folder-tree" id="folderTree">
+                <!-- Folder tree will be rendered here -->
+            </div>
+            
+            <div class="note-list" id="noteList">
+                <!-- Note list will be rendered here -->
+            </div>
+            
+            <div class="sidebar-footer">
+                <button id="exportBtn" class="btn btn-secondary" title="Export / Import">
+                    <span class="icon">↔</span> Exp/Imp
+                </button>
+                <button id="settingsBtn" class="btn btn-secondary" title="Settings">
+                    <span class="icon">⚙</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="mainContent" class="main-content">
+            <!-- Editor Panel -->
+            <div class="editor-panel" id="editorPanel">
+                <div class="editor-header">
+                    <input type="text" id="noteTitle" class="note-title-input" placeholder="Untitled Note">
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" data-action="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+                        <button class="toolbar-btn" data-action="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+                        <button class="toolbar-btn" data-action="heading" title="Heading">H</button>
+                        <button class="toolbar-btn" data-action="link" title="Link">🔗</button>
+                        <button class="toolbar-btn" data-action="code" title="Code">&lt;/&gt;</button>
+                        <button class="toolbar-btn" data-action="list" title="List">•</button>
+                        <button class="toolbar-btn" data-action="quote" title="Quote">"</button>
+                        <span class="toolbar-separator"></span>
+                        <button class="toolbar-btn" id="viewToggle" title="Toggle Preview">👁</button>
+                    </div>
+                    <div class="editor-status">
+                        <span id="saveStatus" class="save-status">Saved</span>
+                        <span id="wordCount" class="word-count">0 words</span>
+                    </div>
+                </div>
+                
+                <div class="editor-container">
+                    <div class="editor-pane" id="editorPane">
+                        <textarea id="noteEditor" class="note-editor" placeholder="Start writing..."></textarea>
+                    </div>
+                    <div class="preview-pane hidden" id="previewPane">
+                        <div id="notePreview" class="note-preview"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Context Panel -->
+        <aside id="contextPanel" class="context-panel">
+            <div class="context-section">
+                <h3 class="context-title">Backlinks</h3>
+                <div id="backlinksList" class="backlinks-list">
+                    <p class="empty-message">No backlinks yet</p>
+                </div>
+            </div>
+            
+            <div class="context-section">
+                <h3 class="context-title">Outgoing Links</h3>
+                <div id="outgoingLinksList" class="outgoing-links-list">
+                    <p class="empty-message">No outgoing links</p>
+                </div>
+            </div>
+            
+            <div class="context-section">
+                <h3 class="context-title">Tags</h3>
+                <div id="tagsList" class="tags-list">
+                    <p class="empty-message">No tags</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Graph View Modal -->
+    <div id="graphModal" class="modal hidden">
+        <div class="modal-content graph-modal-content">
+            <div class="modal-header">
+                <h2>Graph View</h2>
+                <button id="closeGraphBtn" class="close-btn">&times;</button>
+            </div>
+            <div id="graphContainer" class="graph-container"></div>
+        </div>
+    </div>
+
+    <!-- Export/Import Modal -->
+    <div id="exportModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Export / Import</h2>
+                <button id="closeExportBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Export Options</h3>
+                <button id="exportCurrentMd" class="export-btn">Export Current Note (.md)</button>
+                <button id="exportCurrentJson" class="export-btn">Export Current Note (.json)</button>
+                <button id="exportAllMd" class="export-btn">Export All as ZIP (preserves folders)</button>
+                <button id="exportAllJson" class="export-btn">Export All as JSON (full backup)</button>
+                
+                <h3>Import Options</h3>
+                <div class="import-options">
+                    <div class="import-option">
+                        <label><strong>1. Single Markdown File (.md)</strong></label>
+                        <p>Import one note from a .md file</p>
+                        <input type="file" id="importSingleMd" accept=".md">
+                    </div>
+                    <div class="import-option">
+                        <label><strong>2. Folder of Markdown (.zip)</strong></label>
+                        <p>Import folder structure with .md files</p>
+                        <input type="file" id="importZip" accept=".zip">
+                    </div>
+                    <div class="import-option">
+                        <label><strong>3. Full Vault Backup (.json)</strong></label>
+                        <p>Import complete vault (notes + folders)</p>
+                        <input type="file" id="importJson" accept=".json">
+                    </div>
+                </div>
+                <button id="importBtn" class="btn btn-primary">Import Selected File</button>
+                <p class="import-hint">Select a file above, then click Import</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="closeSettingsBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label>View Mode</label>
+                    <select id="viewModeSelect">
+                        <option value="edit">Editor Only</option>
+                        <option value="preview">Preview Only</option>
+                        <option value="split" selected>Split View</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Font Size</label>
+                    <input type="range" id="fontSizeSlider" min="12" max="20" value="15">
+                    <span id="fontSizeValue">15px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal hidden">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>Delete Note</h2>
+                <button id="closeDeleteBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this note? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
+                <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

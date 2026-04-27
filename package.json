@@ -1,0 +1,15 @@
+{
+  "name": "obsidianclonetest-webapp-opencode2-ubm24-ss256usdms3-mm2-aas-rpb",
+  "version": "1.0.0",
+  "description": "**Production-grade engineering skills for AI coding agents.**",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
