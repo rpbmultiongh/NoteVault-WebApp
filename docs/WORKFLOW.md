@@ -289,12 +289,20 @@ Deploy the webapp to production.
 
 For static webapps:
 
-| Platform | Command | Notes |
-|----------|---------|-------|
-| GitHub Pages | `git push` | Free, simple |
-| Netlify | Drag & drop | Free tier available |
-| Vercel | `vercel deploy` | Free for static |
-| Cloudflare Pages | `wrangler` | Free, fast |
+| Platform | Command | Free Tier | Notes |
+|----------|---------|----------|-------|
+| GitHub Pages | `git push` | Yes | Free, simple |
+| Netlify | Drag & drop | Yes | Free tier available |
+| Vercel | `vercel deploy` | Yes | Free for static |
+| Cloudflare Pages | `wrangler` | Yes | Free, fast (RECOMMENDED) |
+
+For full-stack (with backend):
+
+| Platform | Services | Free Tier | Docs |
+|----------|----------|----------|------|
+| Cloudflare | R2 + D1 + Workers | Yes | [Cloudflare Deploy Guide](./CLOUDFLARE_DEPLOY.md) |
+| AWS | S3 + DynamoDB + Lambda | Pay | SST required |
+| Supabase | Database + Storage | Yes | supabase.com |
 
 ### Post-Launch
 
@@ -414,3 +422,7 @@ npx serve .
 - [skills/](../skills/) - Available skills
 - [agents/](../agents/) - Available personas
 - [SPEC.md](./SPEC.md) - Project specification template
+- [AGENT_INSTRUCTIONS.md](./AGENT_INSTRUCTIONS.md) - Comprehensive agent instructions
+- [SPEC_TEMPLATE.md](./SPEC_TEMPLATE.md) - Specification template
+- [WEBAPP_WALKTHROUGH.md](./WEBAPP_WALKTHROUGH.md) - User walkthrough guide
+- [CLOUDFLARE_DEPLOY.md](./CLOUDFLARE_DEPLOY.md) - Cloudflare deployment guide
