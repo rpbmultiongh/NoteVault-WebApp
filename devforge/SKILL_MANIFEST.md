@@ -39,6 +39,17 @@ This file provides a catalog of all available skills in the harness-framework. A
 | `shipping-and-launch` | Deploy to production | Ready to deploy |
 | `ci-cd-and-automation` | Set up CI/CD | Need automation |
 | `git-workflow-and-versioning` | Git best practices | Version control tasks |
+| `deploy-webapp` | Deploy to Cloudflare + Supabase | Full-stack deployment |
+| `database-setup` | Set up Supabase databases | Database initialization |
+| `e2e-testing` | Test webapp functionality | End-to-end verification |
+
+### EvoAgentX Integration Skills
+
+| Skill Name | Purpose | When to Use |
+|------------|---------|-------------|
+| `fullstack-deploy` | Complete deployment workflow | Deploying full-stack apps |
+| `api-testing` | Test API endpoints | Verify API functionality |
+| `user-management` | Manage test users | Debug multi-user scenarios |
 
 ### Documentation & Process Skills
 

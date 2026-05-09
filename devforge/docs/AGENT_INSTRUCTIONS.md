@@ -371,3 +371,106 @@ curl https://your-url.com
 - [WORKFLOW.md](./WORKFLOW.md)
 - [skills/](./skills/) - Available skills
 - [agents/](./agents/) - Personas
+
+---
+
+## Cloudflare + Supabase Free Stack (VERIFIED WORKING 2026-05-08)
+
+A fully functional, zero-cost full-stack deployment pipeline:
+
+### Architecture
+
+```
+User Browser → Cloudflare Pages (React) → Cloudflare Workers API → Supabase (PostgreSQL)
+GitHub Push → GitHub Actions → Auto-deploy to Cloudflare
+```
+
+### Services & Free Limits
+
+| Service | Purpose | Free Limit |
+|---------|---------|------------|
+| Cloudflare Pages | Frontend hosting | Unlimited bandwidth |
+| Cloudflare Workers | API/backend | 100k requests/day |
+| Supabase | Database | 500MB PostgreSQL |
+
+### Deploy in 3 Commands
+
+```bash
+# 1. Deploy API
+npx wrangler deploy src/worker/api.ts --name my-api
+
+# 2. Set Supabase secret (one-time)
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --name my-api
+
+# 3. Deploy frontend
+npx wrangler pages deploy dist --project-name my-frontend
+```
+
+### Essential Patterns
+
+**1. CORS Headers (ALWAYS add):**
+```typescript
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+};
+```
+
+**2. User ID Management:**
+```javascript
+function getUserId() {
+  let id = localStorage.getItem('app_user_id');
+  if (!id) {
+    id = 'user_' + Math.random().toString(36).substring(2, 15);
+    localStorage.setItem('app_user_id', id);
+  }
+  return id;
+}
+```
+
+**3. Supabase Tables (run in SQL Editor):**
+```sql
+CREATE TABLE files (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id TEXT NOT NULL,
+  name TEXT NOT NULL,
+  type TEXT,
+  size INTEGER,
+  created_at BIGINT NOT NULL,
+  modified_at BIGINT NOT NULL,
+  is_deleted INTEGER DEFAULT 0
+);
+```
+
+### Debug Tools (Add to Every App)
+
+- Admin Panel with Ctrl+Shift+D shortcut
+- Console log capture
+- API testing buttons
+- User switching
+
+### Common Issues & Fixes
+
+| Issue | Fix |
+|-------|-----|
+| CORS errors | Add CORS_HEADERS to Worker response |
+| Files not showing | Check userId matches in localStorage |
+| "Table not found" | Create tables in Supabase SQL Editor |
+| Old code showing | Deploy with `--commit-dirty=true` |
+
+### Documentation
+
+- [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) - Complete guide
+- [workflows/FULLSTACK_DEPLOY.md](./workflows/FULLSTACK_DEPLOY.md) - Workflow steps
+- [skills/DEPLOY_WEBAPP.md](./skills/DEPLOY_WEBAPP.md) - Deployment skill
+- [protocols/SUPABASE_SETUP.md](./protocols/SUPABASE_SETUP.md) - Database setup
+
+### Live Example
+
+- **Frontend:** https://production.driveclone-frontend.pages.dev
+- **API:** https://driveclone-api.driveclone.workers.dev
+- **GitHub:** https://github.com/rpbmultiongh/GoogleDriveClone-WebApp
+
+---
+
+*Updated: 2026-05-08 - Stack fully verified and documented*

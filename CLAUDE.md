@@ -1,43 +1,66 @@
-# agent-skills
+# DevForge Project Instructions
 
-This is the agent-skills project — a collection of production-grade engineering skills for AI coding agents.
+You are working in a project with two main components:
 
 ## Project Structure
 
 ```
-skills/       → Core skills (SKILL.md per directory)
-agents/       → Reusable agent personas (code-reviewer, test-engineer, security-auditor)
-hooks/        → Session lifecycle hooks
-.claude/commands/ → Slash commands (/spec, /plan, /build, /test, /review, /code-simplify, /ship)
-references/   → Supplementary checklists (testing, performance, security, accessibility)
-docs/         → Setup guides for different tools
+├── driveclone/     # Your webapp
+│   └── src/        # React + Vite frontend + Cloudflare Workers API
+│
+└── devforge/       # The DevForge AI coding framework
+    ├── agents/     # AI agent personas (code-reviewer, test-engineer, security-auditor)
+    ├── skills/     # Reusable development skills (26+ skills)
+    ├── protocols/   # Standardized setup procedures
+    ├── workflows/   # Automated deployment workflows
+    ├── tools/       # EvoAgentX tool wrappers (Python)
+    ├── docs/        # Guides and documentation
+    └── SKILL_MANIFEST.md  # All available skills
 ```
 
-## Skills by Phase
+## Working with the Webapp
 
-**Define:** spec-driven-development
-**Plan:** planning-and-task-breakdown
-**Build:** incremental-implementation, test-driven-development, context-engineering, source-driven-development, frontend-ui-engineering, api-and-interface-design
-**Verify:** browser-testing-with-devtools, debugging-and-error-recovery
-**Review:** code-review-and-quality, code-simplification, security-and-hardening, performance-optimization
-**Ship:** git-workflow-and-versioning, ci-cd-and-automation, deprecation-and-migration, documentation-and-adrs, shipping-and-launch
+**Webapp:** `driveclone/` - The Google Drive clone webapp
 
-## Conventions
+**Commands (from driveclone folder):**
+```bash
+npm run build                          # Build frontend
+npx wrangler pages deploy dist --project-name=driveclone-frontend  # Deploy frontend
+npx wrangler deploy src/worker/api.ts --name driveclone-api          # Deploy API
+npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY --name driveclone-api  # Set secret
+```
 
-- Every skill lives in `skills/<name>/SKILL.md`
-- YAML frontmatter with `name` and `description` fields
-- Description starts with what the skill does (third person), followed by trigger conditions ("Use when...")
-- Every skill has: Overview, When to Use, Process, Common Rationalizations, Red Flags, Verification
-- References are in `references/`, not inside skill directories
-- Supporting files only created when content exceeds 100 lines
+## DevForge Framework
 
-## Commands
+**Framework:** `devforge/` - Use this for:
+- Agent personas → `devforge/agents/`
+- Development skills → `devforge/skills/`
+- Setup protocols → `devforge/protocols/`
+- Deployment workflows → `devforge/workflows/`
+- Documentation → `devforge/docs/`
 
-- `npm test` — Not applicable (this is a documentation project)
-- Validate: Check that all SKILL.md files have valid YAML frontmatter with name and description
+## Key Reference Files
 
-## Boundaries
+| File | Purpose |
+|------|---------|
+| `devforge/docs/DEPLOYMENT_GUIDE.md` | Cloudflare + Supabase deployment |
+| `devforge/docs/AGENT_INSTRUCTIONS.md` | AI agent instructions |
+| `devforge/docs/EVOAGENTX_INTEGRATION.md` | EvoAgentX tools |
+| `devforge/docs/protocols/SUPABASE_SETUP.md` | Database setup SQL |
+| `devforge/docs/workflows/FULLSTACK_DEPLOY.md` | Deployment workflow |
 
-- Always: Follow the skill-anatomy.md format for new skills
-- Never: Add skills that are vague advice instead of actionable processes
-- Never: Duplicate content between skills — reference other skills instead
+## Tech Stack
+
+- **Frontend:** React + Vite → Cloudflare Pages (FREE)
+- **API:** Cloudflare Workers (FREE - 100k/day)
+- **Database:** Supabase PostgreSQL (FREE - 500MB)
+- **Total Cost:** $0/month
+
+## Live URLs
+
+- **Frontend:** https://production.driveclone-frontend.pages.dev
+- **API:** https://driveclone-api.driveclone.workers.dev
+
+---
+
+*DevForge - Forge your ideas into production apps.*
